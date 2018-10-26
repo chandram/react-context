@@ -1,28 +1,46 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import {ThemeContext, themes} from './theme-context';
+import ThemedButton from './themed-button';
+import ThemeTogglerButton from './theme-toggler-button';
+import ToolBar from './toolbar';
 
 class App extends Component {
+
+  constructor(props){
+    super(props);
+
+    this.toggleTheme = () => {
+      this.setState(state => ({
+        theme: state.theme === themes.dark ? themes.light : themes.dark
+      }))
+    }
+
+    this.state = {
+      theme: themes.dark,
+      toggleTheme: this.toggleTheme
+    }
+  }
+
   render() {
     return (
       <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
+        <ThemeContext.Provider value={this.state}>
+          <div>
+            <ToolBar onChangeTheme={this.toggleTheme}></ToolBar>
+            <section>
+              <ThemeTogglerButton></ThemeTogglerButton>
+            </section>
+          </div>
+        </ThemeContext.Provider>
+        <section>
+          <ThemedButton></ThemedButton>
+        </section>
       </div>
+      
     );
   }
 }
 
 export default App;
+
+
